@@ -25,12 +25,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (message.status === 'sent') {
-      return NextResponse.json(
-        { error: 'Ce message a déjà été envoyé' },
-        { status: 400 }
-      );
-    }
+    // Test mode: permettre l'envoi multiple du même message
+    // if (message.status === 'sent') {
+    //   return NextResponse.json(
+    //     { error: 'Ce message a déjà été envoyé' },
+    //     { status: 400 }
+    //   );
+    // }
 
     // Envoyer l'email immédiatement
     // Convertir les attachments au format attendu (avec path au lieu de key)
