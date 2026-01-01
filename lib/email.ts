@@ -83,7 +83,7 @@ export async function sendConfirmationEmail(email: string) {
                       <strong style="color: #f2c94c;">L'équipe ProchainMoi</strong>
                     </p>
                     <p style="margin: 0; color: #adb5bd; font-size: 11px;">
-                      &copy; 2026 ProchainMoi
+                      &copy; ${new Date().getFullYear()} ProchainMoi
                     </p>
                   </td>
                 </tr>
@@ -99,11 +99,39 @@ export async function sendConfirmationEmail(email: string) {
   await transporter.sendMail(mailOptions);
 }
 
+function getTimeDifference(createdAt: Date, sendDate: Date): string {
+  const diffMs = sendDate.getTime() - createdAt.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays < 30) {
+    return `${diffDays} jour${diffDays > 1 ? 's' : ''}`;
+  } else if (diffDays < 365) {
+    const diffMonths = Math.floor(diffDays / 30);
+    return `${diffMonths} mois`;
+  } else {
+    const diffYears = Math.floor(diffDays / 365);
+    const remainingMonths = Math.floor((diffDays % 365) / 30);
+    if (remainingMonths > 0) {
+      return `${diffYears} an${diffYears > 1 ? 's' : ''} et ${remainingMonths} mois`;
+    }
+    return `${diffYears} an${diffYears > 1 ? 's' : ''}`;
+  }
+}
+
 export async function sendFutureMessage(
   email: string,
   message: string,
-  attachments: Array<{ filename: string; path: string }>
+  attachments: Array<{ filename: string; path: string }>,
+  createdAt: Date
 ) {
+  const sendDate = new Date();
+  const currentYear = sendDate.getFullYear();
+  const timeDiff = getTimeDifference(createdAt, sendDate);
+  const createdDateFormatted = createdAt.toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
   const mailOptions = {
     from: process.env.SMTP_FROM,
     to: email,
@@ -114,7 +142,7 @@ export async function sendFutureMessage(
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Tangerine:wght@400;700&display=swap" rel="stylesheet">
       </head>
       <body style="margin: 0; padding: 0; background: #f8f9fa; font-family: 'Quicksand', Arial, sans-serif;">
         <table width="100%" cellpadding="0" cellspacing="0" style="background: #f8f9fa; padding: 10px;">
@@ -128,26 +156,50 @@ export async function sendFutureMessage(
                   </td>
                 </tr>
                 
-                <!-- Titre -->
+                <!-- Contenu principal -->
                 <tr>
-                  <td style="padding: 15px 20px;">
-                    <h2 style="color: #2c3e50; font-size: 22px; font-weight: 700; margin: 0 0 12px; text-align: center;">
-                      Un message de votre passé
-                    </h2>
-                    <p style="color: #555; font-size: 15px; line-height: 1.6; margin: 0 0 15px; text-align: center;">
-                      Vous aviez écrit ce message pour votre <strong style="color: #56ccf2;">futur vous</strong>. Le moment est venu de le découvrir ! ⏰
+                  <td style="padding: 20px 30px;">
+                    <p style="color: #555; font-size: 15px; line-height: 1.6; margin: 0 0 10px;">
+                      Il y a <strong style="color: #f2c94c;">${timeDiff}</strong>, le <strong>${createdDateFormatted}</strong>, vous avez pris un moment pour vous parler.
+                    </p>
+                    <p style="color: #555; font-size: 15px; line-height: 1.6; margin: 0 0 10px;">
+                      Vous avez appuyé sur pause, regardé vers l'avenir, et laissé une version de vous-même écrire ces lignes.
+                    </p>
+                    <p style="color: #2c3e50; font-size: 16px; line-height: 1.6; margin: 0 0 10px; font-weight: 600;">
+                      Aujourd'hui, ce futur est arrivé.
+                    </p>
+                    <p style="color: #555; font-size: 15px; line-height: 1.6; margin: 0 0 10px;">
+                      Ce message, c'est un souvenir, une promesse, une pensée que vous aviez choisi de préserver.<br>
+                      Une trace de ce que vous ressentiez, de ce que vous espériez, ou de ce que vous vouliez devenir.
+                    </p>
+                    <p style="color: #2c3e50; font-size: 15px; line-height: 1.6; margin: 0 0 20px; font-weight: 600;">
+                      Voici ce que vous vous étiez dit :
                     </p>
                   </td>
                 </tr>
                 
                 <!-- Message -->
                 <tr>
-                  <td style="padding: 0 20px 20px;">
-                    <div style="background: #fff9e6; border-left: 3px solid #f2c94c; padding: 15px; border-radius: 8px;">
-                      <div style="color: #2c3e50; font-size: 15px; line-height: 1.6; white-space: pre-wrap; font-style: italic;">
+                  <td style="padding: 0 30px 20px;">
+                    <div style="background: #f8f9fa; border-left: 4px solid #f2c94c; padding: 20px; border-radius: 8px;">
+                      <div style="color: #2c3e50; font-size: 24px; line-height: 1.6; white-space: pre-wrap; font-family: 'Tangerine', cursive; font-weight: 700;">
 ${message.replace(/\n/g, '<br>')}
                       </div>
                     </div>
+                  </td>
+                </tr>
+                
+                <!-- Conclusion -->
+                <tr>
+                  <td style="padding: 20px 30px;">
+                    <p style="color: #555; font-size: 15px; line-height: 1.6; margin: 0 0 10px;">
+                      Prenez le temps de le lire.<br>
+                      Prenez le temps de sentir ce que cela réveille.
+                    </p>
+                    <p style="color: #2c3e50; font-size: 15px; line-height: 1.6; margin: 0; font-style: italic;">
+                      Ce n'est pas juste un email.<br>
+                      C'est une rencontre entre celui que vous étiez et celui que vous êtes devenu.
+                    </p>
                   </td>
                 </tr>
                 
@@ -172,7 +224,7 @@ ${message.replace(/\n/g, '<br>')}
                       <strong style="color: #f2c94c;">ProchainMoi</strong>
                     </p>
                     <p style="margin: 0; color: #adb5bd; font-size: 11px;">
-                      &copy; 2026 ProchainMoi
+                      &copy; ${currentYear} ProchainMoi
                     </p>
                   </td>
                 </tr>

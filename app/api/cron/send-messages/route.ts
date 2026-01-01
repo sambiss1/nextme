@@ -43,7 +43,12 @@ export async function GET(request: NextRequest) {
           }
         }
 
-        await sendFutureMessage(message.email, message.message, attachments);
+        await sendFutureMessage(
+          message.email,
+          message.message,
+          attachments,
+          message.createdAt || new Date()
+        );
 
         message.status = 'sent';
         await message.save();

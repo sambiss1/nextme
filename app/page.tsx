@@ -106,14 +106,13 @@ export default function Home() {
       <Header />
 
       <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold mb-3 text-gray-800 dark:text-gray-100">
-            Écrivez à votre futur vous
+        <div className="mb-8 text-center" style={{ fontFamily: 'Tangerine, cursive' }}>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-800 dark:text-gray-100" style={{ fontFamily: 'Tangerine, cursive' }}>
+            Un jour, vous relirez ces mots.
           </h1>
-          <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Créez un message que vous recevrez à la date de votre choix.
-            <br />
-            <span className="text-[#56ccf2] font-medium">Facile, simple et sécurisé.</span>
+          <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
+            Et vous vous souviendrez de qui vous étiez, et de tout ce que vous vouliez devenir.<br />
+            Écrivez maintenant. Le futur vous attend.
           </p>
         </div>
 

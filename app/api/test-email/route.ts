@@ -33,7 +33,10 @@ Bonne journée à toi, futur moi.
 Cordialement,
 Ton moi du passé`;
 
-      await sendFutureMessage(email, testMessage, []);
+      const testCreatedDate = new Date();
+      testCreatedDate.setMonth(testCreatedDate.getMonth() - 6); // Simuler un message créé il y a 6 mois
+
+      await sendFutureMessage(email, testMessage, [], testCreatedDate);
       return NextResponse.json({
         success: true,
         message: 'Email de message futur envoyé',

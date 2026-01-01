@@ -43,7 +43,8 @@ export async function POST(request: NextRequest) {
     await sendFutureMessage(
       message.email,
       message.message,
-      emailAttachments
+      emailAttachments,
+      message.createdAt || new Date()
     );
 
     // Marquer le message comme envoyé
