@@ -77,13 +77,13 @@ export default function Home() {
             Vous recevrez un email de confirmation. Votre message sera envoyé à la date prévue.
           </p>
           <div className="space-y-3">
-            <button
+            {/* <button
               onClick={handleSendNow}
               disabled={sending}
               className="bg-[#f2c94c] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#e5b935] transition-colors w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {sending ? 'Envoi en cours...' : '🚀 Envoyer maintenant (test)'}
-            </button>
+            </button> */}
             <button
               onClick={() => {
                 setShowSuccess(false);
@@ -106,13 +106,14 @@ export default function Home() {
       <Header />
 
       <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="mb-8 text-center" style={{ fontFamily: 'Tangerine, cursive' }}>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-800 dark:text-gray-100" style={{ fontFamily: 'Tangerine, cursive' }}>
+        <div className="mb-8 text-center">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-black dark:text-white" style={{ fontFamily: 'Tangerine, cursive' }}>
             Un jour, vous relirez ces mots.
           </h1>
-          <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl lg:text-2xl text-black dark:text-white max-w-3xl mx-auto leading-relaxed">
             Et vous vous souviendrez de qui vous étiez, et de tout ce que vous vouliez devenir.<br />
-            Écrivez maintenant. Le futur vous attend.
+            {/* Écrivez maintenant. Le futur vous attend. */}
+            Ecrivez un message à votre futur vous, pour ne pas oublier ce qui compte aujourd&apos;hui.
           </p>
         </div>
 
