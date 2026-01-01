@@ -118,6 +118,92 @@ function getTimeDifference(createdAt: Date, sendDate: Date): string {
   }
 }
 
+export async function sendErrorNotification(
+  errorDetails: {
+    errorMessage: string;
+    errorStack?: string;
+    context: string;
+    timestamp: Date;
+  }
+) {
+  const mailOptions = {
+    from: process.env.SMTP_FROM,
+    to: 'sambisselele@gmail.com',
+    subject: '🚨 Erreur Cron Job - ProchainMoi',
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin: 0; padding: 0; background: #f8f9fa; font-family: Arial, sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background: #f8f9fa; padding: 20px;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;">
+                <!-- Header -->
+                <tr>
+                  <td style="padding: 20px; background: #dc2626; text-align: center;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 24px;">🚨 Erreur Cron Job</h1>
+                  </td>
+                </tr>
+                
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 30px;">
+                    <h2 style="color: #dc2626; font-size: 18px; margin: 0 0 15px;">Détails de l'erreur</h2>
+                    
+                    <div style="background: #fef2f2; border-left: 4px solid #dc2626; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+                      <p style="margin: 0 0 10px; color: #1f2937; font-weight: 600;">Contexte :</p>
+                      <p style="margin: 0; color: #374151;">${errorDetails.context}</p>
+                    </div>
+                    
+                    <div style="background: #f9fafb; padding: 15px; border-radius: 4px; margin-bottom: 15px;">
+                      <p style="margin: 0 0 10px; color: #1f2937; font-weight: 600;">Message d'erreur :</p>
+                      <code style="color: #dc2626; font-size: 13px; display: block; white-space: pre-wrap;">${errorDetails.errorMessage}</code>
+                    </div>
+                    
+                    ${errorDetails.errorStack ? `
+                    <div style="background: #f9fafb; padding: 15px; border-radius: 4px; margin-bottom: 15px;">
+                      <p style="margin: 0 0 10px; color: #1f2937; font-weight: 600;">Stack trace :</p>
+                      <code style="color: #6b7280; font-size: 11px; display: block; white-space: pre-wrap; max-height: 200px; overflow-y: auto;">${errorDetails.errorStack}</code>
+                    </div>
+                    ` : ''}
+                    
+                    <p style="margin: 0; color: #6b7280; font-size: 13px;">
+                      <strong>Timestamp :</strong> ${errorDetails.timestamp.toLocaleString('fr-FR', {
+      dateStyle: 'full',
+      timeStyle: 'long'
+    })}
+                    </p>
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="background: #f9fafb; padding: 15px; text-align: center; border-top: 1px solid #e5e7eb;">
+                    <p style="margin: 0; color: #6b7280; font-size: 12px;">
+                      ProchainMoi - Notification automatique d'erreur
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (emailError) {
+    console.error('Erreur lors de l\'envoi de l\'email de notification:', emailError);
+  }
+}
+
 export async function sendFutureMessage(
   email: string,
   message: string,
