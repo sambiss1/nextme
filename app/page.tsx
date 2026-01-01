@@ -8,6 +8,8 @@ import MessageForm from '@/components/MessageForm';
 export default function Home() {
   const router = useRouter();
   const [showSuccess, setShowSuccess] = useState(false);
+  const [lastMessageId, setLastMessageId] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
 
   const handleSubmit = async (formData: FormData) => {
     const response = await fetch('/api/messages', {
@@ -15,13 +17,38 @@ export default function Home() {
       body: formData,
     });
 
-    if (!response.ok) {
+    if (response.ok) {
+      const data = await response.json();
+      setLastMessageId(data.messageId);
+      setShowSuccess(true);
+    } else {
       const error = await response.json();
       alert(error.error || 'Une erreur est survenue');
-      return;
     }
+  };
 
-    setShowSuccess(true);
+  const handleSendNow = async () => {
+    if (!lastMessageId) return;
+
+    setSending(true);
+    try {
+      const response = await fetch('/api/send-now', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messageId: lastMessageId }),
+      });
+
+      if (response.ok) {
+        alert('Message envoyé avec succès ! Vérifiez votre boîte email.');
+      } else {
+        const error = await response.json();
+        alert(error.error || 'Erreur lors de l\'envoi');
+      }
+    } catch (error) {
+      alert('Erreur lors de l\'envoi du message');
+    } finally {
+      setSending(false);
+    }
   };
 
   if (showSuccess) {
@@ -45,14 +72,27 @@ export default function Home() {
           </div>
           <h2 className="text-2xl font-bold text-gray-800">Message enregistré !</h2>
           <p className="text-gray-600">
-            Vous allez recevoir un email de confirmation avec un lien pour accéder à votre tableau de bord.
+            Vous recevrez un email de confirmation. Votre message sera envoyé à la date prévue.
           </p>
-          <button
-            onClick={() => router.push('/')}
-            className="bg-[#56ccf2] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#45b8e0] transition-colors w-full"
-          >
-            Créer un autre message
-          </button>
+          <div className="space-y-3">
+            <button
+              onClick={handleSendNow}
+              disabled={sending}
+              className="bg-[#f2c94c] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#e5b935] transition-colors w-full disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {sending ? 'Envoi en cours...' : '🚀 Envoyer maintenant (test)'}
+            </button>
+            <button
+              onClick={() => {
+                setShowSuccess(false);
+                setLastMessageId(null);
+                router.push('/');
+              }}
+              className="bg-[#56ccf2] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#45b8e0] transition-colors w-full"
+            >
+              Créer un autre message
+            </button>
+          </div>
         </div>
       </div>
     );

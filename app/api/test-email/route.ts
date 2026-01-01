@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (type === 'confirmation') {
-      await sendConfirmationEmail(email, accessToken || 'test-token-123');
+      await sendConfirmationEmail(email); //test-token-123');
       return NextResponse.json({
         success: true,
         message: 'Email de confirmation envoyé',

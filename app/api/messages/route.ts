@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
       accessToken,
     });
 
-    await sendConfirmationEmail(email, accessToken);
+    await sendConfirmationEmail(email);
 
     return NextResponse.json({
       success: true,

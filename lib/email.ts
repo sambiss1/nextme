@@ -10,8 +10,8 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function sendConfirmationEmail(email: string, accessToken: string) {
-  const accessUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/tableau-de-bord?token=${accessToken}`;
+export async function sendConfirmationEmail(email: string) {
+  // Dashboard feature disabled - no access token needed
 
   const mailOptions = {
     from: process.env.SMTP_FROM,
@@ -32,10 +32,8 @@ export async function sendConfirmationEmail(email: string, accessToken: string) 
               <table width="600" cellpadding="0" cellspacing="0" style="background: #ffffff; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden;">
                 <!-- Header avec logo -->
                 <tr>
-                  <td style="background: linear-gradient(135deg, #f2c94c 0%, #56ccf2 100%); padding: 40px; text-align: center;">
-                    <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                      ProchainMoi
-                    </h1>
+                  <td style="padding: 40px 40px 30px; text-align: center; background: #ffffff;">
+                    <img src="${process.env.NEXT_PUBLIC_BASE_URL}/logo.png" alt="ProchainMoi" style="max-width: 200px; height: auto; display: block; margin: 0 auto;" />
                   </td>
                 </tr>
                 
@@ -61,26 +59,17 @@ export async function sendConfirmationEmail(email: string, accessToken: string) 
                       Votre message pour votre <strong style="color: #f2c94c;">futur vous</strong> a bien été enregistré dans notre système. 🎉
                     </p>
                     <p style="color: #555; font-size: 16px; line-height: 1.8; margin: 0 0 30px;">
-                      Vous pouvez consulter le statut de tous vos messages en accédant à votre tableau de bord personnel :
+                      Vous recevrez votre message à la date prévue directement par email.
                     </p>
-                  </td>
-                </tr>
-                
-                <!-- Bouton CTA -->
-                <tr>
-                  <td style="padding: 0 40px 40px; text-align: center;">
-                    <a href="${accessUrl}" style="display: inline-block; background: linear-gradient(135deg, #f2c94c 0%, #56ccf2 100%); color: #ffffff; text-decoration: none; padding: 18px 40px; border-radius: 50px; font-size: 18px; font-weight: 700; box-shadow: 0 6px 20px rgba(86, 204, 242, 0.4); transition: all 0.3s;">
-                      📊 Accéder à mon tableau de bord
-                    </a>
                   </td>
                 </tr>
                 
                 <!-- Info importante -->
                 <tr>
                   <td style="padding: 0 40px 40px;">
-                    <div style="background: linear-gradient(135deg, #fff9e6 0%, #e6f7ff 100%); border-left: 4px solid #f2c94c; padding: 20px; border-radius: 12px;">
+                    <div style="background: #f0f0f0; border-left: 4px solid #f2c94c; padding: 20px; border-radius: 12px;">
                       <p style="margin: 0; color: #555; font-size: 14px; line-height: 1.6;">
-                        <strong style="color: #f2c94c;">💡 Important :</strong> Conservez ce lien précieusement ! Il vous permettra d'accéder à vos messages à tout moment, sans avoir besoin de créer un compte.
+                        <strong style="color: #f2c94c;">💡 Astuce :</strong> Vous pouvez créer autant de messages futurs que vous le souhaitez sur ProchainMoi.
                       </p>
                     </div>
                   </td>
@@ -132,21 +121,10 @@ export async function sendFutureMessage(
           <tr>
             <td align="center">
               <table width="600" cellpadding="0" cellspacing="0" style="background: #ffffff; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden;">
-                <!-- Header avec logo -->
+                <!-- Logo -->
                 <tr>
-                  <td style="background: linear-gradient(135deg, #f2c94c 0%, #56ccf2 100%); padding: 40px; text-align: center;">
-                    <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                      ProchainMoi
-                    </h1>
-                  </td>
-                </tr>
-                
-                <!-- Icône -->
-                <tr>
-                  <td style="padding: 40px 40px 20px; text-align: center;">
-                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #f2c94c 0%, #56ccf2 100%); border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(242, 201, 76, 0.3);">
-                      <span style="font-size: 40px;">💌</span>
-                    </div>
+                  <td style="padding: 40px 40px 30px; text-align: center;">
+                    <img src="${process.env.NEXT_PUBLIC_BASE_URL}/logo.png" alt="ProchainMoi" style="max-width: 200px; height: auto; display: block; margin: 0 auto;" />
                   </td>
                 </tr>
                 
